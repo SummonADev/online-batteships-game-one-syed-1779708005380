@@ -1,17 +1,31 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-@theme {
+:root {
   --color-ocean-dark: #0a1628;
-  --color-ocean-mid: #0d2240;
-  --color-ocean-surface: #1a3a5c;
-  --color-ocean-light: #2a5a8c;
-  --color-wave: #3a7ab8;
-  --color-accent: #00d4ff;
-  --color-ship: #4a9e6b;
-  --color-ship-placed: #2d7a4f;
-  --color-hit: #ff4444;
-  --color-sunk: #cc2222;
-  --color-miss: #1a4a6c;
+  --color-ocean-mid: #0d2040;
+  --color-ocean-light: #1a4a7a;
+  --color-ocean-surface: #1e5490;
+  --color-wave: #2563a8;
+  --color-ship: #4a9eff;
+  --color-ship-placed: #1e40af;
+  --color-accent: #f59e0b;
+  --color-hit: #ef4444;
+  --color-sunk: #7f1d1d;
+  --color-miss: #374151;
+}
+
+@theme inline {
+  --color-ocean-dark: var(--color-ocean-dark);
+  --color-ocean-mid: var(--color-ocean-mid);
+  --color-ocean-light: var(--color-ocean-light);
+  --color-ocean-surface: var(--color-ocean-surface);
+  --color-wave: var(--color-wave);
+  --color-ship: var(--color-ship);
+  --color-ship-placed: var(--color-ship-placed);
+  --color-accent: var(--color-accent);
+  --color-hit: var(--color-hit);
+  --color-sunk: var(--color-sunk);
+  --color-miss: var(--color-miss);
 }
 
 * {
@@ -20,33 +34,54 @@
   padding: 0;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: #0a1628;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--color-ocean-dark);
   color: white;
-  overflow-x: hidden;
 }
 
-/* Custom cell preview classes */
 .cell-preview {
-  background-color: rgba(0, 212, 255, 0.35) !important;
-  border-color: rgba(0, 212, 255, 0.7) !important;
+  background-color: rgba(74, 158, 255, 0.4) !important;
+  border-color: rgba(74, 158, 255, 0.8) !important;
 }
 
 .cell-preview-invalid {
-  background-color: rgba(255, 68, 68, 0.35) !important;
-  border-color: rgba(255, 68, 68, 0.7) !important;
+  background-color: rgba(239, 68, 68, 0.4) !important;
+  border-color: rgba(239, 68, 68, 0.8) !important;
 }
 
-/* Animations */
+.bg-hit {
+  background-color: var(--color-hit);
+}
+
+.bg-sunk {
+  background-color: var(--color-sunk);
+}
+
+.bg-miss {
+  background-color: var(--color-miss);
+}
+
+.bg-ship-placed {
+  background-color: var(--color-ship-placed);
+}
+
+.bg-ocean-mid {
+  background-color: var(--color-ocean-mid);
+}
+
+.bg-ocean-dark {
+  background-color: var(--color-ocean-dark);
+}
+
+.bg-ocean-surface {
+  background-color: var(--color-ocean-surface);
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -60,23 +95,5 @@ body {
 }
 
 .fade-in {
-  animation: fadeIn 0.4s ease forwards;
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0a1628;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #2a5a8c;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #3a7ab8;
+  animation: fadeIn 0.3s ease forwards;
 }
