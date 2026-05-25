@@ -2,11 +2,16 @@ export type CellState = 'empty' | 'ship' | 'hit' | 'miss' | 'sunk';
 
 export type Orientation = 'horizontal' | 'vertical';
 
-export type GamePhase = 'setup' | 'battle' | 'gameover';
+export type Cell = {
+  row: number;
+  col: number;
+  state: CellState;
+  shipId: string | null;
+};
 
-export type Turn = 'player' | 'bot';
+export type Board = Cell[][];
 
-export interface Ship {
+export type Ship = {
   id: string;
   name: string;
   size: number;
@@ -14,28 +19,21 @@ export interface Ship {
   sunk: boolean;
   cells: { row: number; col: number }[];
   orientation: Orientation;
-}
+};
 
-export interface Cell {
-  row: number;
-  col: number;
-  state: CellState;
-  shipId: string | null;
-}
+export type GamePhase = 'setup' | 'battle' | 'gameover';
 
-export type Board = Cell[][];
-
-export interface GameState {
+export type GameState = {
   phase: GamePhase;
   playerBoard: Board;
   botBoard: Board;
   playerShips: Ship[];
   botShips: Ship[];
-  turn: Turn;
+  turn: 'player' | 'bot';
   selectedShip: Ship | null;
   orientation: Orientation;
   winner: 'player' | 'bot' | null;
   message: string;
   botLastHit: { row: number; col: number } | null;
   botHitStack: { row: number; col: number }[];
-}
+};
