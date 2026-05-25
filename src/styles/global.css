@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ocean-dark: #0a1628;
+  --color-ocean-mid: #0d2137;
+  --color-ocean-light: #1a3a5c;
+  --color-ocean-surface: #1e4976;
+  --color-wave: #2a6496;
+  --color-accent: #f59e0b;
+  --color-hit: #ef4444;
+  --color-miss: #6b7280;
+  --color-ship: #4b82b5;
+  --color-ship-placed: #3b6fa5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-ocean-dark);
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.cell-hit {
+  background-color: var(--color-hit) !important;
+  animation: hitPulse 0.4s ease;
+}
+
+.cell-miss {
+  background-color: var(--color-miss) !important;
+}
+
+.cell-ship {
+  background-color: var(--color-ship-placed);
+}
+
+.cell-preview {
+  background-color: rgba(75, 130, 181, 0.5);
+}
+
+.cell-preview-invalid {
+  background-color: rgba(239, 68, 68, 0.5);
+}
+
+@keyframes hitPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.shake {
+  animation: shake 0.3s ease;
+}
