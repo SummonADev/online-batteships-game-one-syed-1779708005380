@@ -1,138 +1,80 @@
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    --color-ocean-dark: #0a1628;
-    --color-ocean-mid: #0d1f3c;
-    --color-ocean-surface: #1a3a5c;
-    --color-ocean-light: #4a90d9;
-    --color-wave: #5ba4e5;
-    --color-accent: #f0c040;
-    --color-ship: #6b9e6b;
-    --color-ship-placed: #4a7a4a;
-    --color-hit: #e05050;
-    --color-sunk: #c03030;
-    --color-miss: #3a5a7a;
-  }
-
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: var(--color-ocean-dark);
-    color: white;
-    overflow-x: hidden;
-  }
+@theme {
+  --color-ocean-dark: #0a1628;
+  --color-ocean-mid: #0d1f3c;
+  --color-ocean-surface: #1a3a5c;
+  --color-ocean-light: #4a8fa8;
+  --color-wave: #2a6f8f;
+  --color-accent: #f0c040;
+  --color-ship: #4a9a6f;
+  --color-ship-placed: #2a6a4f;
+  --color-hit: #e05040;
+  --color-sunk: #a02030;
+  --color-miss: #2a4a6a;
 }
 
-@layer utilities {
-  .bg-ocean-dark {
-    background-color: var(--color-ocean-dark);
-  }
-  .bg-ocean-mid {
-    background-color: var(--color-ocean-mid);
-  }
-  .bg-ocean-surface {
-    background-color: var(--color-ocean-surface);
-  }
-  .bg-ocean-light {
-    background-color: var(--color-ocean-light);
-  }
-  .bg-wave {
-    background-color: var(--color-wave);
-  }
-  .bg-accent {
-    background-color: var(--color-accent);
-  }
-  .bg-ship {
-    background-color: var(--color-ship);
-  }
-  .bg-ship-placed {
-    background-color: var(--color-ship-placed);
-  }
-  .bg-hit {
-    background-color: var(--color-hit);
-  }
-  .bg-sunk {
-    background-color: var(--color-sunk);
-  }
-  .bg-miss {
-    background-color: var(--color-miss);
-  }
-
-  .text-ocean-dark {
-    color: var(--color-ocean-dark);
-  }
-  .text-ocean-mid {
-    color: var(--color-ocean-mid);
-  }
-  .text-ocean-light {
-    color: var(--color-ocean-light);
-  }
-  .text-accent {
-    color: var(--color-accent);
-  }
-  .text-hit {
-    color: var(--color-hit);
-  }
-  .text-ship {
-    color: var(--color-ship);
-  }
-
-  .border-ocean-light {
-    border-color: var(--color-ocean-light);
-  }
-  .border-accent {
-    border-color: var(--color-accent);
-  }
-  .border-hit {
-    border-color: var(--color-hit);
-  }
-  .border-ship {
-    border-color: var(--color-ship);
-  }
-
-  .cell-preview {
-    background-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
-    border-color: var(--color-accent);
-  }
-
-  .cell-preview-invalid {
-    background-color: color-mix(in srgb, var(--color-hit) 40%, transparent);
-    border-color: var(--color-hit);
-  }
-
-  .fade-in {
-    animation: fadeIn 0.3s ease forwards;
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-ocean-dark);
+  color: white;
 }
 
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.cell-preview {
+  background-color: color-mix(in srgb, var(--color-ship) 50%, transparent);
+  border-color: var(--color-ship);
+}
+
+.cell-preview-invalid {
+  background-color: color-mix(in srgb, var(--color-hit) 50%, transparent);
+  border-color: var(--color-hit);
+}
+
+.bg-ocean-dark { background-color: var(--color-ocean-dark); }
+.bg-ocean-mid { background-color: var(--color-ocean-mid); }
+.bg-ocean-surface { background-color: var(--color-ocean-surface); }
+.bg-ocean-light { background-color: var(--color-ocean-light); }
+.bg-wave { background-color: var(--color-wave); }
+.bg-accent { background-color: var(--color-accent); }
+.bg-ship { background-color: var(--color-ship); }
+.bg-ship-placed { background-color: var(--color-ship-placed); }
+.bg-hit { background-color: var(--color-hit); }
+.bg-sunk { background-color: var(--color-sunk); }
+.bg-miss { background-color: var(--color-miss); }
+
+.text-accent { color: var(--color-accent); }
+.text-ocean-light { color: var(--color-ocean-light); }
+.text-ocean-dark { color: var(--color-ocean-dark); }
+.text-hit { color: var(--color-hit); }
+.text-ship { color: var(--color-ship); }
+
+.border-accent { border-color: var(--color-accent); }
+.border-ocean-light { border-color: var(--color-ocean-light); }
+.border-hit { border-color: var(--color-hit); }
+.border-ship { border-color: var(--color-ship); }
