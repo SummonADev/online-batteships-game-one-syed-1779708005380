@@ -5,13 +5,13 @@
   --color-ocean-mid: #0d1f3c;
   --color-ocean-light: #1e3a5f;
   --color-ocean-surface: #1a3050;
-  --color-accent: #4fc3f7;
-  --color-wave: #29b6f6;
-  --color-ship: #4caf50;
-  --color-ship-placed: #2e7d32;
-  --color-hit: #ef5350;
-  --color-sunk: #b71c1c;
-  --color-miss: #546e7a;
+  --color-wave: #2a5298;
+  --color-accent: #00d4ff;
+  --color-ship: #4a9eff;
+  --color-ship-placed: #1e4a7a;
+  --color-hit: #ff4444;
+  --color-sunk: #cc0000;
+  --color-miss: #334466;
 }
 
 * {
@@ -47,15 +47,43 @@ body {
 }
 
 .fade-in {
-  animation: fadeIn 0.4s ease forwards;
+  animation: fadeIn 0.3s ease forwards;
 }
 
 .cell-preview {
-  background-color: rgba(79, 195, 247, 0.35);
-  border-color: rgba(79, 195, 247, 0.7);
+  background-color: rgba(0, 212, 255, 0.35) !important;
+  border-color: rgba(0, 212, 255, 0.7) !important;
 }
 
 .cell-preview-invalid {
-  background-color: rgba(239, 83, 80, 0.35);
-  border-color: rgba(239, 83, 80, 0.7);
+  background-color: rgba(255, 68, 68, 0.35) !important;
+  border-color: rgba(255, 68, 68, 0.7) !important;
+}
+
+.bg-hit {
+  background-color: var(--color-hit);
+}
+
+.bg-sunk {
+  background-color: var(--color-sunk);
+}
+
+.bg-miss {
+  background-color: var(--color-miss);
+}
+
+.bg-ship-placed {
+  background-color: var(--color-ship-placed);
+}
+
+.bg-ocean-mid {
+  background-color: var(--color-ocean-mid);
+}
+
+.bg-ocean-surface {
+  background-color: var(--color-ocean-surface);
+}
+
+.bg-wave\/60 {
+  background-color: rgba(42, 82, 152, 0.6);
 }

@@ -1,4 +1,6 @@
-export type CellState = 'empty' | 'ship' | 'hit' | 'sunk' | 'miss';
+export type CellState = 'empty' | 'ship' | 'hit' | 'miss' | 'sunk';
+
+export type Orientation = 'horizontal' | 'vertical';
 
 export type Cell = {
   row: number;
@@ -7,7 +9,7 @@ export type Cell = {
   shipId: string | null;
 };
 
-export type Orientation = 'horizontal' | 'vertical';
+export type Board = Cell[][];
 
 export type Ship = {
   id: string;
@@ -18,8 +20,6 @@ export type Ship = {
   cells: { row: number; col: number }[];
   orientation: Orientation;
 };
-
-export type Board = Cell[][];
 
 export type GamePhase = 'setup' | 'battle' | 'gameover';
 
