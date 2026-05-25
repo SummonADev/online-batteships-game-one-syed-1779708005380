@@ -1,17 +1,17 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-ocean-dark: #0a1628;
-  --color-ocean-mid: #0d1f3c;
-  --color-ocean-light: #1e3a5f;
-  --color-ocean-surface: #1a3050;
-  --color-wave: #2a5298;
+  --color-ocean-mid: #0d2137;
+  --color-ocean-surface: #1a3a5c;
+  --color-ocean-light: #2a5f8f;
+  --color-wave: #3a7fc1;
   --color-accent: #00d4ff;
   --color-ship: #4a9eff;
-  --color-ship-placed: #1e4a7a;
+  --color-ship-placed: #2a6acc;
   --color-hit: #ff4444;
-  --color-sunk: #cc0000;
-  --color-miss: #334466;
+  --color-sunk: #cc2222;
+  --color-miss: #1a3a5c;
 }
 
 * {
@@ -28,12 +28,25 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: var(--color-ocean-dark);
   color: white;
+  min-height: 100vh;
 }
 
+/* Cell preview classes */
+.cell-preview {
+  background-color: rgba(0, 212, 255, 0.3);
+  border-color: rgba(0, 212, 255, 0.6);
+}
+
+.cell-preview-invalid {
+  background-color: rgba(255, 68, 68, 0.3);
+  border-color: rgba(255, 68, 68, 0.6);
+}
+
+/* Animations */
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -42,48 +55,14 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .fade-in {
   animation: fadeIn 0.3s ease forwards;
-}
-
-.cell-preview {
-  background-color: rgba(0, 212, 255, 0.35) !important;
-  border-color: rgba(0, 212, 255, 0.7) !important;
-}
-
-.cell-preview-invalid {
-  background-color: rgba(255, 68, 68, 0.35) !important;
-  border-color: rgba(255, 68, 68, 0.7) !important;
-}
-
-.bg-hit {
-  background-color: var(--color-hit);
-}
-
-.bg-sunk {
-  background-color: var(--color-sunk);
-}
-
-.bg-miss {
-  background-color: var(--color-miss);
-}
-
-.bg-ship-placed {
-  background-color: var(--color-ship-placed);
-}
-
-.bg-ocean-mid {
-  background-color: var(--color-ocean-mid);
-}
-
-.bg-ocean-surface {
-  background-color: var(--color-ocean-surface);
-}
-
-.bg-wave\/60 {
-  background-color: rgba(42, 82, 152, 0.6);
 }
