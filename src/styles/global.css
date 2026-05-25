@@ -1,53 +1,46 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: #0a0a0a;
+    color: #f5f0eb;
+    -webkit-font-smoothing: antialiased;
+  }
+}
 
 @theme {
-  --color-brand-black: #0a0a0a;
-  --color-brand-dark: #111111;
-  --color-brand-gray: #1a1a1a;
-  --color-brand-mid: #2a2a2a;
-  --color-brand-light: #f5f0eb;
-  --color-brand-cream: #faf7f2;
-  --color-brand-gold: #c9a84c;
-  --color-brand-gold-light: #e2c97e;
-  --font-display: 'Playfair Display', serif;
-  --font-body: 'Inter', sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background-color: #0a0a0a;
-  color: #f5f0eb;
-  font-family: 'Inter', sans-serif;
-}
-
-::selection {
-  background: #c9a84c;
-  color: #0a0a0a;
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #0a0a0a;
-}
-::-webkit-scrollbar-thumb {
-  background: #c9a84c;
-  border-radius: 3px;
+  --color-ocean-dark: #0a1628;
+  --color-ocean-mid: #0d2137;
+  --color-ocean-surface: #1a3a5c;
+  --color-ocean-light: #4a90c4;
+  --color-wave: #2563a8;
+  --color-accent: #fbbf24;
+  --color-ship: #64748b;
+  --color-ship-placed: #334155;
+  --color-hit: #ef4444;
+  --color-sunk: #991b1b;
+  --color-miss: #1e40af;
 }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeIn {
@@ -55,23 +48,56 @@ body {
   to { opacity: 1; }
 }
 
-@keyframes slideRight {
-  from { width: 0; }
-  to { width: 100%; }
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
 }
 
-.animate-fade-up {
-  animation: fadeUp 0.8s ease forwards;
+.cell-preview {
+  background-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  border-color: color-mix(in srgb, var(--color-accent) 60%, transparent);
 }
 
-.animate-fade-in {
-  animation: fadeIn 1s ease forwards;
+.cell-preview-invalid {
+  background-color: color-mix(in srgb, var(--color-hit) 35%, transparent);
+  border-color: color-mix(in srgb, var(--color-hit) 60%, transparent);
 }
 
-.gold-line::after {
-  content: '';
-  display: block;
-  height: 2px;
-  background: #c9a84c;
-  animation: slideRight 0.8s ease forwards;
+.bg-ship-placed {
+  background-color: var(--color-ship-placed);
+}
+
+.bg-hit {
+  background-color: var(--color-hit);
+}
+
+.bg-sunk {
+  background-color: var(--color-sunk);
+}
+
+.bg-miss {
+  background-color: var(--color-miss);
+}
+
+.bg-ocean-dark {
+  background-color: var(--color-ocean-dark);
+}
+
+.bg-ocean-mid {
+  background-color: var(--color-ocean-mid);
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.text-hit {
+  color: var(--color-hit);
+}
+
+.border-accent {
+  border-color: var(--color-accent);
+}
+
+.border-hit {
+  border-color: var(--color-hit);
 }
