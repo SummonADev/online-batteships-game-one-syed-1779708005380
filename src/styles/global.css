@@ -1,17 +1,51 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
   --color-ocean-dark: #0a1628;
-  --color-ocean-mid: #0d2140;
-  --color-ocean-light: #1a3a5c;
-  --color-ocean-surface: #1e4976;
-  --color-wave: #2563eb;
-  --color-accent: #38bdf8;
-  --color-ship: #64748b;
-  --color-ship-placed: #334155;
+  --color-ocean-mid: #0d1f3c;
+  --color-ocean-surface: #1a3a5c;
+  --color-ocean-light: #2d6a9f;
+  --color-wave: #3d8bc4;
+  --color-accent: #f0c040;
+  --color-ship: #4a9eff;
+  --color-ship-placed: #1e4d8c;
   --color-hit: #ef4444;
   --color-sunk: #991b1b;
-  --color-miss: #1e40af;
+  --color-miss: #64748b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-ocean-dark);
+  color: white;
+}
+
+.cell-preview {
+  background-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  border-color: var(--color-accent);
+}
+
+.cell-preview-invalid {
+  background-color: color-mix(in srgb, var(--color-hit) 40%, transparent);
+  border-color: var(--color-hit);
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes fadeUp {
@@ -23,35 +57,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.fade-in {
-  animation: fadeIn 0.4s ease forwards;
-}
-
-.cell-preview {
-  background-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
-  border-color: color-mix(in srgb, var(--color-accent) 60%, transparent);
-}
-
-.cell-preview-invalid {
-  background-color: color-mix(in srgb, var(--color-hit) 30%, transparent);
-  border-color: color-mix(in srgb, var(--color-hit) 60%, transparent);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: system-ui, -apple-system, sans-serif;
-  background-color: var(--color-ocean-dark);
-  color: white;
 }
