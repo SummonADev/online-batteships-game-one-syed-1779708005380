@@ -9,8 +9,6 @@ export type Cell = {
   shipId: string | null;
 };
 
-export type Board = Cell[][];
-
 export type Ship = {
   id: string;
   name: string;
@@ -20,6 +18,8 @@ export type Ship = {
   cells: { row: number; col: number }[];
   orientation: Orientation;
 };
+
+export type Board = Cell[][];
 
 export type GamePhase = 'setup' | 'battle' | 'gameover';
 
