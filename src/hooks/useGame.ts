@@ -9,7 +9,6 @@ import {
   fireAtCell,
   allShipsSunk,
   botChooseTarget,
-  SHIP_CONFIGS,
 } from '@/lib/battleship';
 
 function createInitialState(): GameState {
@@ -23,7 +22,7 @@ function createInitialState(): GameState {
     selectedShip: null,
     orientation: 'horizontal',
     winner: null,
-    message: 'Place your ships! Select a ship and click on the grid.',
+    message: 'Place your ships! Select a ship and click or drag it onto the grid.',
     botLastHit: null,
     botHitStack: [],
   };
@@ -31,7 +30,7 @@ function createInitialState(): GameState {
 
 export function useGame() {
   const [state, setState] = useState<GameState>(createInitialState);
-  const botTimeoutRef = useRef<any>(null);
+  const botTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const selectShip = useCallback((ship: Ship) => {
     setState(prev => ({
@@ -47,6 +46,7 @@ export function useGame() {
     }));
   }, []);
 
+  // placeShip uses whichever selectedShip is in state at call time
   const placeShip = useCallback((row: number, col: number) => {
     setState(prev => {
       if (!prev.selectedShip || prev.selectedShip.placed) return prev;
@@ -79,6 +79,45 @@ export function useGame() {
     });
   }, []);
 
+  // placeShipById selects the ship by id first, then places — used for drag & drop
+  const placeShipById = useCallback(
+    (shipId: string, row: number, col: number) => {
+      setState(prev => {
+        const ship = prev.playerShips.find(s => s.id === shipId);
+        if (!ship || ship.placed) return prev;
+
+        if (!canPlaceShip(prev.playerBoard, ship, row, col, prev.orientation)) {
+          return { ...prev, message: 'Cannot place ship there! Try another position.' };
+        }
+
+        const { board, ship: placedShip } = placeShipOnBoard(
+          prev.playerBoard,
+          ship,
+          row,
+          col,
+          prev.orientation
+        );
+
+        const updatedShips = prev.playerShips.map(s =>
+          s.id === placedShip.id ? placedShip : s
+        );
+        const allPlaced = updatedShips.every(s => s.placed);
+        const nextUnplaced = updatedShips.find(s => !s.placed) || null;
+
+        return {
+          ...prev,
+          playerBoard: board,
+          playerShips: updatedShips,
+          selectedShip: nextUnplaced,
+          message: allPlaced
+            ? 'All ships placed! Click "Start Battle" to begin.'
+            : `${placedShip.name} placed! Now place your ${nextUnplaced?.name}.`,
+        };
+      });
+    },
+    []
+  );
+
   const autoPlaceShips = useCallback(() => {
     setState(prev => {
       const freshShips = createInitialShips();
@@ -99,7 +138,7 @@ export function useGame() {
       playerBoard: createEmptyBoard(),
       playerShips: createInitialShips(),
       selectedShip: null,
-      message: 'Place your ships! Select a ship and click on the grid.',
+      message: 'Place your ships! Select a ship and click or drag it onto the grid.',
     }));
   }, []);
 
@@ -123,49 +162,43 @@ export function useGame() {
     });
   }, []);
 
-  const playerFire = useCallback(
-    (row: number, col: number) => {
-      setState(prev => {
-        if (prev.phase !== 'battle' || prev.turn !== 'player') return prev;
+  const playerFire = useCallback((row: number, col: number) => {
+    setState(prev => {
+      if (prev.phase !== 'battle' || prev.turn !== 'player') return prev;
 
-        const cell = prev.botBoard[row][col];
-        if (cell.state === 'hit' || cell.state === 'miss' || cell.state === 'sunk') {
-          return { ...prev, message: 'Already fired there! Choose another cell.' };
-        }
+      const cell = prev.botBoard[row][col];
+      if (cell.state === 'hit' || cell.state === 'miss' || cell.state === 'sunk') {
+        return { ...prev, message: 'Already fired there! Choose another cell.' };
+      }
 
-        const { board, ships, hit, sunk } = fireAtCell(prev.botBoard, prev.botShips, row, col);
+      const { board, ships, hit, sunk } = fireAtCell(prev.botBoard, prev.botShips, row, col);
 
-        let message = hit
-          ? sunk
-            ? `You sunk the enemy's ${ships.find(s => s.id === prev.botBoard[row][col].shipId)?.name || 'ship'}!`
-            : 'Hit! Fire again!'
-          : 'Miss! Bot\'s turn.';
+      const message = hit
+        ? sunk
+          ? `You sunk the enemy's ${ships.find(s => s.id === prev.botBoard[row][col].shipId)?.name || 'ship'}!`
+          : 'Hit! Fire again!'
+        : "Miss! Bot's turn.";
 
-        if (allShipsSunk(ships)) {
-          return {
-            ...prev,
-            botBoard: board,
-            botShips: ships,
-            phase: 'gameover',
-            winner: 'player',
-            message: '🎉 You win! All enemy ships sunk!',
-          };
-        }
-
+      if (allShipsSunk(ships)) {
         return {
           ...prev,
           botBoard: board,
           botShips: ships,
-          turn: hit ? 'player' : 'bot',
-          message,
+          phase: 'gameover',
+          winner: 'player',
+          message: '🎉 You win! All enemy ships sunk!',
         };
-      });
+      }
 
-      // Schedule bot move if miss (check after state update)
-      // We'll handle it via useEffect in the component, but here we do it with a timeout
-    },
-    []
-  );
+      return {
+        ...prev,
+        botBoard: board,
+        botShips: ships,
+        turn: hit ? 'player' : 'bot',
+        message,
+      };
+    });
+  }, []);
 
   const botFire = useCallback(() => {
     setState(prev => {
@@ -190,8 +223,9 @@ export function useGame() {
       }
 
       if (sunk) {
-        // Clear hit stack for the sunk ship
-        const sunkShip = ships.find(s => s.sunk && !prev.playerShips.find(ps => ps.id === s.id && ps.sunk));
+        const sunkShip = ships.find(
+          s => s.sunk && !prev.playerShips.find(ps => ps.id === s.id && ps.sunk)
+        );
         if (sunkShip) {
           newHitStack = newHitStack.filter(
             h => !sunkShip.cells.some(c => c.row === h.row && c.col === h.col)
@@ -202,8 +236,9 @@ export function useGame() {
         botLastHit = null;
       }
 
-      const shipName = ships.find(s => s.id === board[target.row][target.col].shipId)?.name || 'your ship';
-      let message = hit
+      const shipName =
+        ships.find(s => s.id === board[target.row][target.col].shipId)?.name || 'your ship';
+      const message = hit
         ? sunk
           ? `Bot sunk your ${shipName}!`
           : 'Bot hit your ship! Bot fires again.'
@@ -246,6 +281,7 @@ export function useGame() {
     selectShip,
     toggleOrientation,
     placeShip,
+    placeShipById,
     autoPlaceShips,
     resetPlacement,
     startBattle,

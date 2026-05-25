@@ -37,6 +37,17 @@ export default function GamePage() {
 
   const allShipsPlaced = state.playerShips.every(s => s.placed);
 
+  // Handle drop: find ship by id then place it
+  function handleDropShip(shipId: string, row: number, col: number) {
+    const ship = state.playerShips.find(s => s.id === shipId);
+    if (!ship || ship.placed) return;
+    // Make sure the ship is selected so placeShip works correctly
+    selectShip(ship);
+    // Use a tiny timeout to let state update before placing
+    // Actually we call placeShip directly with the current orientation
+    placeShip(row, col);
+  }
+
   return (
     <div className="min-h-screen bg-ocean-dark text-white">
       {/* Header */}
@@ -67,7 +78,7 @@ export default function GamePage() {
                       : 'bg-ocean-light/20 border-ocean-light/40 text-ocean-light/60'
                   )}
                 >
-                  BOT\'S TURN
+                  BOT&apos;S TURN
                 </span>
               </div>
             )}
@@ -120,6 +131,7 @@ export default function GamePage() {
             <div className="flex flex-col gap-4 w-full lg:w-64">
               <div className="bg-ocean-mid/50 rounded-xl border border-ocean-light/20 p-4">
                 <h2 className="text-base font-bold text-accent mb-3 uppercase tracking-wide">Your Fleet</h2>
+                <p className="text-xs text-ocean-light/60 mb-3">Click or drag ships onto the board.</p>
                 <ShipList
                   ships={state.playerShips}
                   selectedShip={state.selectedShip}
@@ -178,6 +190,7 @@ export default function GamePage() {
                 selectedShip={state.selectedShip}
                 orientation={state.orientation}
                 onCellClick={placeShip}
+                onDropShip={handleDropShip}
                 label="Your Ocean"
               />
             </div>

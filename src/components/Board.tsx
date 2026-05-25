@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import clsx from 'clsx';
 import Cell from '@/components/Cell';
 import type { Board as BoardType, Ship, Orientation } from '@/types';
@@ -11,6 +11,7 @@ type BoardProps = {
   selectedShip?: Ship | null;
   orientation?: Orientation;
   onCellClick?: (row: number, col: number) => void;
+  onDropShip?: (shipId: string, row: number, col: number) => void;
   label?: string;
   disabled?: boolean;
 };
@@ -25,27 +26,61 @@ export default function Board({
   selectedShip = null,
   orientation = 'horizontal',
   onCellClick,
+  onDropShip,
   label,
   disabled = false,
 }: BoardProps) {
   const [hoverCell, setHoverCell] = useState<{ row: number; col: number } | null>(null);
+  const [dragOverCell, setDragOverCell] = useState<{ row: number; col: number } | null>(null);
+  const dragShipRef = useRef<Ship | null>(null);
+
+  const activeHover = dragOverCell ?? hoverCell;
 
   const previewCells =
-    isSetup && selectedShip && hoverCell
-      ? getShipCells(selectedShip.size, hoverCell.row, hoverCell.col, orientation)
+    isSetup && selectedShip && activeHover
+      ? getShipCells(selectedShip.size, activeHover.row, activeHover.col, orientation)
       : [];
 
   const previewValid =
-    isSetup && selectedShip && hoverCell
-      ? canPlaceShip(board, selectedShip, hoverCell.row, hoverCell.col, orientation)
+    isSetup && selectedShip && activeHover
+      ? canPlaceShip(board, selectedShip, activeHover.row, activeHover.col, orientation)
       : true;
+
+  function handleDragOver(e: React.DragEvent<HTMLDivElement>, row: number, col: number) {
+    if (!isSetup || disabled) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverCell({ row, col });
+  }
+
+  function handleDragLeave(e: React.DragEvent<HTMLDivElement>) {
+    // Only clear if leaving the board entirely
+    const related = e.relatedTarget as Node | null;
+    const board = e.currentTarget;
+    if (!related || !board.contains(related)) {
+      setDragOverCell(null);
+    }
+  }
+
+  function handleDrop(e: React.DragEvent<HTMLDivElement>, row: number, col: number) {
+    if (!isSetup || disabled) return;
+    e.preventDefault();
+    const shipId = e.dataTransfer.getData('shipId');
+    if (shipId && onDropShip) {
+      onDropShip(shipId, row, col);
+    }
+    setDragOverCell(null);
+  }
 
   return (
     <div className="flex flex-col items-center gap-2">
       {label && (
         <h3 className="text-lg font-bold text-accent tracking-wide uppercase">{label}</h3>
       )}
-      <div className="select-none">
+      <div
+        className="select-none"
+        onDragLeave={handleDragLeave}
+      >
         {/* Column labels */}
         <div className="flex ml-8">
           {COLS.map(c => (
@@ -73,8 +108,12 @@ export default function Board({
                     onCellClick(rIdx, cIdx);
                   }
                 }}
-                onMouseEnter={() => setHoverCell({ row: rIdx, col: cIdx })}
+                onMouseEnter={() => {
+                  if (!dragOverCell) setHoverCell({ row: rIdx, col: cIdx });
+                }}
                 onMouseLeave={() => setHoverCell(null)}
+                onDragOver={e => handleDragOver(e, rIdx, cIdx)}
+                onDrop={e => handleDrop(e, rIdx, cIdx)}
               />
             ))}
           </div>

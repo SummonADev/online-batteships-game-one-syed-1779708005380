@@ -10,6 +10,8 @@ type CellProps = {
   onClick?: () => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDrop?: (e: React.DragEvent<HTMLDivElement>) => void;
 };
 
 export default function Cell({
@@ -21,6 +23,8 @@ export default function Cell({
   onClick,
   onMouseEnter,
   onMouseLeave,
+  onDragOver,
+  onDrop,
 }: CellProps) {
   const isPreview = previewCells.some(p => p.row === cell.row && p.col === cell.col);
 
@@ -30,7 +34,7 @@ export default function Cell({
   const stateClasses = clsx({
     'bg-ocean-mid': !isPreview && (cell.state === 'empty' || (cell.state === 'ship' && isEnemy)),
     'bg-ship-placed border-ship/60': !isPreview && cell.state === 'ship' && !isEnemy,
-    'bg-hit': !isPreview && (cell.state === 'hit'),
+    'bg-hit': !isPreview && cell.state === 'hit',
     'bg-sunk': !isPreview && cell.state === 'sunk',
     'bg-miss': !isPreview && cell.state === 'miss',
     'cell-preview': isPreview && previewValid,
@@ -55,6 +59,8 @@ export default function Cell({
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
     >
       {getCellContent()}
     </div>
